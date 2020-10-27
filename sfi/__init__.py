@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, Request, Response, jsonify, request
 from sfi import email_sender
 from sfi import forms
 import os
@@ -20,5 +20,20 @@ def create_app():
             es.send_mail(subject=form.subject.data, message=form.message.data)
             return render_template("index.html", form=forms.MailForm())
         return render_template("index.html", form=form)
+
+    TEMP_TEXT_FILE="./temp_text_file.txt"
+
+    @app.route("/api/webhook", methods=["POST"])
+    def webhook():
+        body = request.json
+        with open(TEMP_TEXT_FILE, "w+") as file:
+            file.write(str(body))
+        return jsonify({"status": "OK"})
+
+    @app.route("/check_temp", methods=["GET"])
+    def check_temp_text_file():
+        with open(TEMP_TEXT_FILE, "r") as file:
+            resp = file.read()
+        return resp
 
     return app

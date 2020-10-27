@@ -1,5 +1,7 @@
 import os
 import requests
+from pydantic import BaseModel
+from typing import List, Optional
 
 
 class ShoperApiClient:
@@ -21,3 +23,40 @@ class ShoperApiClient:
     def get_order_by_id(self, id: str):
         resp: requests.Response = requests.get(f"{self.shoper_base_url}/orders/{id}", headers=self.auth_header)
         return resp
+
+    def get_order_products_filtered_by_order_id(self, order_id: int):
+        URL = f"{self.shoper_base_url}/order-products?filters={{\"order_id\": \"{order_id}\" }}"
+        response: requests.Response = requests.get(URL, headers=self.auth_header)
+        return response
+
+
+### MODELS ###
+
+class OrderProductsListItem(BaseModel):
+    code: str
+    delivery_time: str
+    delivery_time_hours: str
+    discount_perc: str
+    file_options: List[str]
+    id: str
+    loyalty: Optional[str]
+    name: str
+    option: str
+    order_id: str
+    pkwiu: str
+    price: str
+    product_id: str
+    quantity: str
+    stock_id: str
+    tax: str
+    type: str
+    unit: str
+    unit_fp: str
+    weight: str
+
+
+class OrderProducts(BaseModel):
+    count: str
+    list: List[OrderProductsListItem]
+    page: str
+    pages: str
