@@ -22,6 +22,8 @@ def create_app():
         with open(TEMP_TEXT_FILE, "w+") as file:
             file.write(str(body))
         with open(HEADERS_FILE, "w+") as file:
+            file.write(str(type(headers)))
+            file.write("\n")
             file.write(str(headers))
         return jsonify({"status": "OK"})
 
