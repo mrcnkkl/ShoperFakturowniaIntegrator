@@ -22,10 +22,11 @@ def create_app():
         with open(TEMP_TEXT_FILE, "w+") as file:
             file.write(str(body))
         with open(HEADERS_FILE, "a") as file:
-            file.write(str(type(headers)))
-            file.write("\n")
+            file.write("\n----------------------------------------------------------\n")
             file.write(str(headers))
-            file.write("----------------------------------------------------------\n")
+            file.write("\n----------------------------------------------------------\n")
+            file.write(str(type(headers)))
+            file.write("\n----------------------------------------------------------\n")
         return jsonify({"status": "OK"})
 
     @app.route("/check_temp", methods=["GET"])
