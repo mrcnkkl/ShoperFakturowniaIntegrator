@@ -29,7 +29,7 @@ def create_app():
         with open(HEADERS_FILE, "a+") as file:
             file.write(str(headers))
         with open(SHA_FILE, "w+") as file:
-            file.write(_calculate_webhook_sha("3", "21497ED1A0D3B473004E2A061A12AD2AF28BAAC2E6B3B7CE046C0E17340A3F47", str(body)))
+            file.write(_calculate_webhook_sha("3", "21497ED1A0D3B473004E2A061A12AD2AF28BAAC2E6B3B7CE046C0E17340A3F47", str(request.data)))
         return jsonify({"status": "OK"})
 
     @app.route("/check_temp", methods=["GET"])
