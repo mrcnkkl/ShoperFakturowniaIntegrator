@@ -21,7 +21,7 @@ def create_app():
         body = request.json
         with open(TEMP_TEXT_FILE, "w+") as file:
             file.write(str(body))
-        with open(HEADERS_FILE, "a") as file:
+        with open(HEADERS_FILE, "a+") as file:
             file.write("\n----------------------------------------------------------\n")
             file.write(str(headers))
             file.write("\n----------------------------------------------------------\n")
