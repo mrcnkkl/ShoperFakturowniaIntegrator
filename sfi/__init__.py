@@ -12,27 +12,28 @@ def create_app():
     def test():
         return "<h3> ### mrcn ### heroku ### </h3>"
 
-    @app.route("/send_mail", methods=["GET", "POST"])
-    def send_mail():
-        form = forms.MailForm()
-        if form.validate_on_submit():
-            es = email_sender.MailSender()
-            es.send_mail(subject=form.subject.data, message=form.message.data)
-            return render_template("index.html", form=forms.MailForm())
-        return render_template("index.html", form=form)
-
-    TEMP_TEXT_FILE="./temp_text_file.txt"
+    TEMP_TEXT_FILE = "./temp.json"
+    HEADERS_FILE = "./headers.txt"
 
     @app.route("/api/webhook", methods=["POST"])
-    def webhook():
+    def webhook_order_change_status():
+        headers = request.headers
         body = request.json
         with open(TEMP_TEXT_FILE, "w+") as file:
             file.write(str(body))
+        with open(HEADERS_FILE, "w+") as file:
+            file.write(str(headers))
         return jsonify({"status": "OK"})
 
     @app.route("/check_temp", methods=["GET"])
     def check_temp_text_file():
         with open(TEMP_TEXT_FILE, "r") as file:
+            resp = file.read()
+        return resp
+
+    @app.route("/check_headers", methods=["GET"])
+    def check_headers():
+        with open(HEADERS_FILE, "r") as file:
             resp = file.read()
         return resp
 
