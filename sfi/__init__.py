@@ -66,10 +66,10 @@ def create_app():
         body = request.json
         shoper_wh_order_create = ShoperWebhookOrderCreate(**body)
 
-        logger.info(pformat(shoper_wh_order_create.dict()))
+        logger.info(shoper_wh_order_create.dict())
 
         with open(TEMP_TEXT_FILE, "w+") as file:
-            file.write(str(body))
+            file.write(pformat(shoper_wh_order_create.dict()))
         with open(HEADERS_FILE, "a+") as file:
             file.write(str(headers))
         with open(SHA_FILE, "w+") as file:
