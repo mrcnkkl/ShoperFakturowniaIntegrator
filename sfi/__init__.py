@@ -5,6 +5,7 @@ import os
 import hashlib
 from sfi.shoper_client import ShoperWebhookOrderCreate
 import logging
+from pprint import pformat
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(name)s %(levelname)s:%(message)s')
 logger = logging.getLogger("## sfi ##")
@@ -65,8 +66,7 @@ def create_app():
         body = request.json
         shoper_wh_order_create = ShoperWebhookOrderCreate(**body)
 
-        logger.info(shoper_wh_order_create)
-        logger.info(shoper_wh_order_create.dict())
+        logger.info(pformat(shoper_wh_order_create.dict()))
 
         with open(TEMP_TEXT_FILE, "w+") as file:
             file.write(str(body))
