@@ -19,6 +19,8 @@ def create_app():
     def test():
         body = request.json
         logger.info(type(body))
+        data = request.data
+        print(data)
         return "<h3> ### mrcn ### heroku ### </h3>"
 
     TEMP_TEXT_FILE = "./temp.json"
@@ -67,6 +69,15 @@ def create_app():
         shoper_wh_order_create = ShoperWebhookOrderCreate(**body)
 
         logger.info(shoper_wh_order_create.dict())
+
+        print(f"\n")
+        print(f"\n")
+        print(f"\n")
+        data = request.data
+        print(data)
+        print(f"\n")
+        print(f"\n")
+        print(f"\n")
 
         with open(TEMP_TEXT_FILE, "w+") as file:
             file.write(pformat(shoper_wh_order_create.dict()))
