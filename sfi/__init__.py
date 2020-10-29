@@ -3,6 +3,11 @@ from sfi import email_sender
 from sfi import forms
 import os
 import hashlib
+from sfi.shoper_client import ShoperWebhookOrderCreate
+import logging
+
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(name)s %(levelname)s:%(message)s')
+logger = logging.getLogger("## sfi ##")
 
 
 def create_app():
@@ -11,7 +16,8 @@ def create_app():
 
     @app.route("/test", methods=["GET", "POST"])
     def test():
-        print(request.data.decode("utf-8"))
+        body = request.json
+        logger.info(type(body))
         return "<h3> ### mrcn ### heroku ### </h3>"
 
     TEMP_TEXT_FILE = "./temp.json"
@@ -52,5 +58,23 @@ def create_app():
         with open(SHA_FILE, "r") as file:
             resp = file.read()
         return resp
+
+    @app.route("/api/webhook", methods=["POST"])
+    def webhook_order_create():
+        headers = request.headers
+        body = request.json
+        shoper_wh_order_create = ShoperWebhookOrderCreate(**body)
+
+        logger.info(shoper_wh_order_create)
+        logger.info(shoper_wh_order_create.dict())
+
+        with open(TEMP_TEXT_FILE, "w+") as file:
+            file.write(str(body))
+        with open(HEADERS_FILE, "a+") as file:
+            file.write(str(headers))
+        with open(SHA_FILE, "w+") as file:
+            file.write(_calculate_webhook_sha("4", "21497ED1A0D3B473004E2A061A12AD2AF28BAAC2E6B3B7CE046C0E17340A3F47",
+                                              request.data.decode("utf-8")))
+        return jsonify({"status": "OK"})
 
     return app
