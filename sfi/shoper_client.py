@@ -130,10 +130,10 @@ class ShoperOrderAdditionalField(BaseModel):
 class ShoperWebhookOrderCreate(BaseModel):
     order_id: Optional[str]
     user_id: Optional[str]
-    date: datetime.datetime
-    status_date: datetime.datetime
-    confirm_date: datetime.datetime
-    delivery_date: datetime.datetime
+    date: Optional[str]
+    status_date: Optional[str]
+    confirm_date: Optional[str]
+    delivery_date: Optional[str]
     status_id: Optional[str]
     sum: Optional[str]
     payment_id: Optional[str]
