@@ -59,7 +59,7 @@ def create_app():
             resp = file.read()
         return resp
 
-    @app.route("/api/webhook", methods=["POST"])
+    @app.route("/api/webhook/order_create", methods=["POST"])
     def webhook_order_create():
         headers = request.headers
         body = request.json
