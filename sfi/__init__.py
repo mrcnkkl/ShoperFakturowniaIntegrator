@@ -89,7 +89,7 @@ def create_app():
         return jsonify({"status": "OK"})
 
     # /api/webhook/fakturownia/product_update
-    @app.route("/api/webhook/order_create", methods=["POST"])
+    @app.route("/api/webhook/fakturownia/product_update", methods=["POST"])
     def webhook_fakturownia_product_update():
         headers = request.headers
         body = request.json
