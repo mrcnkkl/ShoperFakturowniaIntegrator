@@ -88,8 +88,7 @@ def create_app():
                                               request.data.decode("utf-8")))
         return jsonify({"status": "OK"})
 
-
-    #/api/webhook/fakturownia/product_update
+    # /api/webhook/fakturownia/product_update
     @app.route("/api/webhook/order_create", methods=["POST"])
     def webhook_fakturownia_product_update():
         headers = request.headers
@@ -106,13 +105,6 @@ def create_app():
         print(f"\n")
         print(f"\n")
 
-        with open(TEMP_TEXT_FILE, "w+") as file:
-            file.write(body)
-        with open(HEADERS_FILE, "a+") as file:
-            file.write(str(headers))
-        # with open(SHA_FILE, "w+") as file:
-        #     file.write(_calculate_webhook_sha("4", "21497ED1A0D3B473004E2A061A12AD2AF28BAAC2E6B3B7CE046C0E17340A3F47",
-        #                                       request.data.decode("utf-8")))
         return jsonify({"status": "OK"})
 
     return app
