@@ -2,7 +2,6 @@ import os
 import requests
 from pydantic import BaseModel
 from typing import List, Optional
-import datetime
 
 
 class ShoperApiClient:
