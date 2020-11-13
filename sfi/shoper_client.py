@@ -1,17 +1,22 @@
 import os
 import requests
+from time import sleep
 from pydantic import BaseModel
 from typing import List, Optional
+from sfi import codes
+from sfi import fakturownia_client
+from time import sleep
 
 
 class ShoperApiClient:
 
     def __init__(self, shoper_user: str = None, shoper_password: str = None, shoper_base_url: str = None,
                  token: str = None):
-        self.shoper_user = shoper_user or os.getenv("SHOPER_USER")
+        self.shoper_user = shoper_user or os.getenv("SHOPER_USER") or "api_admin"
         self.shoper_password = shoper_password or os.getenv("SHOPER_PASSWD")
         self.shoper_base_url = shoper_base_url or os.getenv("SHOPER_BASE_URL")
         self.token = token or os.getenv("SHOPER_TOKEN") or self._get_token()
+        print(f"Shoper token = {self.token}")
         self.auth_header = {"Authorization": f"Bearer {self.token}"}
 
     def _get_token(self):
@@ -28,6 +33,29 @@ class ShoperApiClient:
         URL = f"{self.shoper_base_url}/order-products?filters={{\"order_id\": \"{order_id}\" }}"
         response: requests.Response = requests.get(URL, headers=self.auth_header)
         return response
+
+    def get_product_by_id(self, id):
+        URL = f"{self.shoper_base_url}/products/{id}"
+        response: requests.Response = requests.get(URL, headers=self.auth_header)
+        return response
+
+    def get_products(self):
+        print(f"get_products called")
+        headers = {"Authorization": f"Bearer {self.token}"}
+        print(headers)
+        page, pages = 1, 1
+
+        with requests.Session() as session:
+            while True:
+                sleep(1)
+                URL = f"{self.shoper_base_url}/products?page={page}"
+                response = session.get(URL, headers=headers)
+                pages = response.json()["pages"]
+                page = response.json()["page"] + 1
+                for product in response.json()["list"]:
+                    yield product
+                if page >= pages:
+                    break
 
 
 ### MODELS ###
@@ -48,6 +76,10 @@ class ShoperOrderAddress(BaseModel):
     country: Optional[str]
     phone: Optional[str]
     country_code: Optional[str]
+
+
+class ShoperBillingAddress(ShoperOrderAddress):
+    ...
 
 
 class ShoperOrderShipping(BaseModel):
@@ -162,7 +194,7 @@ class ShoperWebhookOrderCreate(BaseModel):
     origin: Optional[str]
     parent_order_id: Optional[str]
     registered: Optional[str]
-    billingAddress: ShoperOrderAddress
+    billingAddress: ShoperBillingAddress
     deliveryAddress: ShoperOrderAddress
     currency_name: Optional[str]
     shipping: ShoperOrderShipping
