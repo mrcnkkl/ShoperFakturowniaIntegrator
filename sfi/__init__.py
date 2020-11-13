@@ -27,7 +27,7 @@ def create_app():
         response = ShoperWebhookCreateOrderService(shoper_wh_order_create).handle_request()
         return jsonify({"ok": "ok"})
 
-    @app.route("/api/webhook/fakturownia/warehouse", methods=["POST"])
+    @app.route("/api/webhook/fakturownia/product_update", methods=["POST"])
     def webhook_fakturownia_warehouse():
         req = request.json
         webhooks["fakturownia"] = dict(req)
