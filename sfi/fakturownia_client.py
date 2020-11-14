@@ -116,6 +116,29 @@ class NewInvoiceRequestNoTaxId(NewInvoiceRequest):
     invoice: NewInvoiceRequestBodyNoCustomerTaxId
 
 
+class FakturowniaWebhookProductUpdateProduct(BaseModel):
+    category_name: Optional[str]
+    code: Optional[str]  # DS025016030,
+    currency: Optional[str]
+    description: Optional[str]
+    disabled: Optional[str]
+    external_ids: Optional[Dict]
+    name: Optional[str]
+    price_gross: Optional[str]
+    price_net: Optional[str]
+    skip_webhooks: Optional[str]
+    stock_level: Optional[str]
+    tax: Optional[str]
+
+
+class FakturowniaWebhookProductUpdate(BaseModel):  # ShoperWebhookOrderCreate
+    api_token: Optional[str]
+    app_name: Optional[str]
+    locale: Optional[str]
+    product: FakturowniaWebhookProductUpdateProduct
+    ...
+
+
 class FakturowniaApiClient:
 
     def __init__(self, fakturownia_base_url: str = None, fakturownia_token: str = None):

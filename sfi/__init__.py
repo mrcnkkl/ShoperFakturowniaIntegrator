@@ -3,6 +3,7 @@ from sfi.config import ConfigBase
 from sfi.logger import logger
 from sfi.shoper_client import ShoperWebhookOrderCreate
 from sfi.shoper_service import ShoperWebhookCreateOrderService
+from sfi.fakturownia_client import FakturowniaWebhookProductUpdate
 import random
 
 webhooks = {
@@ -29,8 +30,8 @@ def create_app():
 
     @app.route("/api/webhook/fakturownia/product_update", methods=["POST"])
     def webhook_fakturownia_warehouse():
-        req = request.json
-        webhooks["fakturownia"] = dict(req)
+        prod_update = FakturowniaWebhookProductUpdate(**request.json)
+        webhooks["fakturownia"] = prod_update.dict()
         return "{'ok':'ok'}"
 
     @app.route("/api/fakturownia/request")
