@@ -37,7 +37,7 @@ class ShoperApiClient:
         response: requests.Response = requests.get(URL, headers=self.auth_header)
         return response
 
-    def update_product_stock(self, prod_code: str, quantity: int):
+    def update_product_stock(self, prod_code: str, quantity: float):
         proc_shop_id = codes.shoper_code_id[prod_code]
         URL = f"{self.shoper_base_url}/products/{proc_shop_id}"
         data = f'{{"stock": {{"stock": {quantity} }} }}'

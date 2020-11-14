@@ -34,7 +34,7 @@ def create_app():
     def webhook_fakturownia_warehouse():
         prod_update = FakturowniaWebhookProductUpdate(**request.json)
         sac = ShoperApiClient()
-        quantity = int(prod_update.product.stock_level)
+        quantity = float(prod_update.product.stock_level)
         prod_code = prod_update.product.code
         response = sac.update_product_stock(prod_code=prod_code, quantity=quantity)
         webhooks["fakturownia"] = str(response.text)
