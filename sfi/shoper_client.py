@@ -1,10 +1,8 @@
 import os
 import requests
-from time import sleep
 from pydantic import BaseModel
 from typing import List, Optional
 from sfi import codes
-from sfi import fakturownia_client
 from time import sleep
 
 
@@ -37,6 +35,16 @@ class ShoperApiClient:
     def get_product_by_id(self, id):
         URL = f"{self.shoper_base_url}/products/{id}"
         response: requests.Response = requests.get(URL, headers=self.auth_header)
+        return response
+
+    def update_product_stock(self, prod_code: str, quantity: int):
+        proc_shop_id = codes.shoper_code_id[prod_code]
+        URL = f"{self.shoper_base_url}/products/{proc_shop_id}"
+        data = f'{{"stock": {{"stock": {quantity} }} }}'
+
+        print(f"data : {data}")
+
+        response = requests.put(url=URL, data=data, headers=self.auth_header)
         return response
 
     def get_products(self):
