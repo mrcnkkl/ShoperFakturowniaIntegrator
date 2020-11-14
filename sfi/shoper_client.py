@@ -4,6 +4,7 @@ from pydantic import BaseModel
 from typing import List, Optional
 from sfi import codes
 from time import sleep
+from requests.models import Response
 
 
 class ShoperApiClient:
@@ -38,14 +39,22 @@ class ShoperApiClient:
         return response
 
     def update_product_stock(self, prod_code: str, quantity: float):
-        proc_shop_id = codes.shoper_code_id[prod_code]
-        URL = f"{self.shoper_base_url}/products/{proc_shop_id}"
-        data = f'{{"stock": {{"stock": {quantity} }} }}'
+        # proc_shop_id = codes.shoper_code_id[prod_code]
+        proc_shop_id = codes.shoper_code_id.get(prod_code)
+        if proc_shop_id:
+            URL = f"{self.shoper_base_url}/products/{proc_shop_id}"
+            data = f'{{"stock": {{"stock": {quantity} }} }}'
 
-        print(f"data : {data}")
+            print(f"data : {data}")
 
-        response = requests.put(url=URL, data=data, headers=self.auth_header)
+            response = requests.put(url=URL, data=data, headers=self.auth_header)
+        else:
+            response = Response()
+            response.status_code = 404
+            content = f"{{'no such code':{prod_code}  }}"
+            response._content = str.encode(content)
         return response
+
 
     def get_products(self):
         print(f"get_products called")
